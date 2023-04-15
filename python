@@ -1,0 +1,104 @@
+import random
+import requests
+
+class EnvironmentRobot:
+    def __init__(self):
+        self.recyclables = []
+    
+    def give_fact(self, country=None):
+        facts = ["Over 8 million tons of plastic are dumped into our oceans every year.",
+                 "The Amazon Rainforest produces over 20% of the world's oxygen.",
+                 "Recycling one aluminum can saves enough energy to power a TV for three hours.",
+                 "The world's largest landfill is located in New York and is larger than the entire island of Manhattan.",
+                 "Carbon dioxide emissions from human activity have increased by 80% since 1970."]
+        if country:
+            url = f"https://restcountries.com/v3.1/name/{country}"
+            response = requests.get(url)
+            data = response.json()
+            try:
+                country_code = data[0]['cca2']
+                url = f"https://api.openweathermap.org/data/2.5/weather?q={country_code}&appid=<API-KEY>"
+                response = requests.get(url)
+                data = response.json()
+                fact = f"Average temperature in {country} is {data['main']['temp']}°C."
+            except:
+                fact = "Sorry, I couldn't find any facts about that country's climate."
+        else:
+            fact = random.choice(facts)
+        return fact
+    
+    def remind(self):
+        return "Remember to stay green and keep the environment clean."
+    
+    def recycle(self, item):
+        self.recyclables.append(item)
+        return f"{item} has been added to the list of recyclables."
+    
+    def get_recyclables(self):
+        return self.recyclables
+    
+food = {}
+
+def add_food():
+    name = input("Enter food name: ")
+    calories = int(input("Enter calories: "))
+    protein = float(input("Enter protein (in grams): "))
+    carbs = float(input("Enter carbs (in grams): "))
+    fat = float(input("Enter fat (in grams): "))
+    food[name] = {
+        "calories": calories,
+        "protein": protein,
+        "carbs": carbs,
+        "fat": fat
+    }
+    print("Food added successfully!")
+
+def view_food():
+    for name, info in food.items():
+        print("Name:", name)
+        print("Calories:", info["calories"])
+        print("Protein:", info["protein"], "g")
+        print("Carbs:", info["carbs"], "g")
+        print("Fat:", info["fat"], "g")
+        print()
+
+def delete_food():
+    name = input("Enter food name to delete: ")
+    if name in food:
+        del food[name]
+        print("Food deleted successfully!")
+    else:
+        print("Food not found!")
+
+while True:
+    query = input("How can I help you? ")
+
+    if "give a random fact about the environment" in query.lower() or "give a fact" in query.lower() or "tell me a fact" in query.lower():
+        # Code for providing a random fact about the environment goes here
+        pass
+
+    elif "stay green" in query.lower() or "keep the environment clean" in query.lower():
+        print("Remember to stay green and keep the environment clean!")
+
+    elif "recycle" in query.lower():
+        # Code for keeping track of items that the user recycles goes here
+        pass
+
+    elif "climate change in" in query.lower():
+        # Code for providing facts about climate change in a specific country goes here
+        pass
+
+    elif "add food" in query.lower():
+        add_food()
+
+    elif "view food" in query.lower():
+        view_food()
+
+    elif "delete food" in query.lower():
+        delete_food()
+
+    elif "exit" in query.lower() or "quit" in query.lower():
+        break
+
+    else:
+        print("I'm sorry, I didn't understand your request.")
