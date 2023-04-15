@@ -112,8 +112,8 @@ import json
 API_KEY = "1fe6df620337f168a605f5c0ff3925f5"
 
 # Function to get the current weather and forecast for a location
-def get_weather(location):
-    # Make a GET request to the OpenWeatherMap API
+def get_weather(New York):
+    
     url = f"https://api.openweathermap.org/data/2.5/weather?q={location}&appid={API_KEY}&units=metric"
     response = requests.get(url)
 
