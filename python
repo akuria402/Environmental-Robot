@@ -105,14 +105,14 @@ while True:
         
         
         
-        import requests
+import requests
 import json
 
 # API key for OpenWeatherMap
-API_KEY = "1fe6df620337f168a605f5c0ff3925f5"
+API_KEY = "<YOUR_API_KEY_HERE>"
 
 # Function to get the current weather and forecast for a location
-def get_weather(New York):
+def get_weather(location):
     
     url = f"https://api.openweathermap.org/data/2.5/weather?q={location}&appid={API_KEY}&units=metric"
     response = requests.get(url)
@@ -143,4 +143,3 @@ def get_weather(New York):
     print("Forecast for the next 5 days:")
     for i in range(0, 5):
         print(f"Day {i+1}: {forecast_temps[i]}°C, {forecast_descs[i]}")
-
