@@ -102,3 +102,45 @@ while True:
 
     else:
         print("I'm sorry, I didn't understand your request.")
+        
+        
+        
+        import requests
+import json
+
+# API key for OpenWeatherMap
+API_KEY = "1fe6df620337f168a605f5c0ff3925f5"
+
+# Function to get the current weather and forecast for a location
+def get_weather(location):
+    # Make a GET request to the OpenWeatherMap API
+    url = f"https://api.openweathermap.org/data/2.5/weather?q={location}&appid={API_KEY}&units=metric"
+    response = requests.get(url)
+
+    # Parse the JSON response
+    data = json.loads(response.text)
+
+    # Get the current temperature and weather description
+    temp = data["main"]["temp"]
+    desc = data["weather"][0]["description"]
+
+    # Make a GET request to the OpenWeatherMap API for forecast data
+    url = f"https://api.openweathermap.org/data/2.5/forecast?q={location}&appid={API_KEY}&units=metric"
+    response = requests.get(url)
+
+    # Parse the JSON response
+    data = json.loads(response.text)
+
+    # Get the forecast temperature and weather description for the next 5 days
+    forecast_temps = []
+    forecast_descs = []
+    for i in range(0, 5):
+        forecast_temps.append(data["list"][i]["main"]["temp"])
+        forecast_descs.append(data["list"][i]["weather"][0]["description"])
+
+    # Print the current weather and forecast data
+    print(f"Current temperature in {location}: {temp}°C, {desc}")
+    print("Forecast for the next 5 days:")
+    for i in range(0, 5):
+        print(f"Day {i+1}: {forecast_temps[i]}°C, {forecast_descs[i]}")
+
