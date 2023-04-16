@@ -1,42 +1,74 @@
 import random
 import requests
+import json
 
 class EnvironmentRobot:
     def __init__(self):
         self.recyclables = []
-    
+
     def give_fact(self, country=None):
+        """
+        Returns a random fact about the environment or the average temperature in a country.
+
+        Parameters:
+        country (str): The name of a country. If provided, the function returns the average temperature in that country.
+
+        Returns:
+        str: A random fact about the environment or the average temperature in a country.
+        """
         facts = ["Over 8 million tons of plastic are dumped into our oceans every year.",
                  "The Amazon Rainforest produces over 20% of the world's oxygen.",
                  "Recycling one aluminum can saves enough energy to power a TV for three hours.",
                  "The world's largest landfill is located in New York and is larger than the entire island of Manhattan.",
                  "Carbon dioxide emissions from human activity have increased by 80% since 1970."]
         if country:
-            url = f"https://restcountries.com/v3.1/name/{country}"
-            response = requests.get(url)
+            country_api_url = f"https://restcountries.com/v3.1/name/{country}"
+            response = requests.get(country_api_url)
             data = response.json()
             try:
                 country_code = data[0]['cca2']
-                url = f"https://api.openweathermap.org/data/2.5/weather?q={country_code}&appid=<API-KEY>"
-                response = requests.get(url)
+                weather_api_url = f"https://api.openweathermap.org/data/2.5/weather?q={country_code}&appid=<API-KEY>"
+                response = requests.get(weather_api_url)
+                response.raise_for_status()
                 data = response.json()
                 fact = f"Average temperature in {country} is {data['main']['temp']}°C."
-            except:
+            except requests.exceptions.HTTPError:
                 fact = "Sorry, I couldn't find any facts about that country's climate."
         else:
             fact = random.choice(facts)
         return fact
-    
+
     def remind(self):
+        """
+        Returns a reminder to stay green and keep the environment clean.
+
+        Returns:
+        str: A reminder to stay green and keep the environment clean.
+        """
         return "Remember to stay green and keep the environment clean."
-    
+
     def recycle(self, item):
+        """
+        Adds an item to the list of recyclables.
+
+        Parameters:
+        item (str): The name of an item to recycle.
+
+        Returns:
+        str: A message indicating that the item has been added to the list of recyclables.
+        """
         self.recyclables.append(item)
         return f"{item} has been added to the list of recyclables."
-    
+
     def get_recyclables(self):
+        """
+        Returns the list of recyclables.
+
+        Returns:
+        list: The list of recyclables.
+        """
         return self.recyclables
-    
+
 food = {}
 
 def add_food():
@@ -53,63 +85,12 @@ def add_food():
     }
     print("Food added successfully!")
 
-def view_food():
-    for name, info in food.items():
-        print("Name:", name)
-        print("Calories:", info["calories"])
-        print("Protein:", info["protein"], "g")
-        print("Carbs:", info["carbs"], "g")
-        print("Fat:", info["fat"], "g")
-        print()
 
-def delete_food():
-    name = input("Enter food name to delete: ")
-    if name in food:
-        del food[name]
-        print("Food deleted successfully!")
-    else:
-        print("Food not found!")
-
-while True:
-    query = input("How can I help you? ")
-
-    if "give a random fact about the environment" in query.lower() or "give a fact" in query.lower() or "tell me a fact" in query.lower():
-        # Code for providing a random fact about the environment goes here
-        pass
-
-    elif "stay green" in query.lower() or "keep the environment clean" in query.lower():
-        print("Remember to stay green and keep the environment clean!")
-
-    elif "recycle" in query.lower():
-        # Code for keeping track of items that the user recycles goes here
-        pass
-
-    elif "climate change in" in query.lower():
-        # Code for providing facts about climate change in a specific country goes here
-        pass
-
-    elif "add food" in query.lower():
-        add_food()
-
-    elif "view food" in query.lower():
-        view_food()
-
-    elif "delete food" in query.lower():
-        delete_food()
-
-    elif "exit" in query.lower() or "quit" in query.lower():
-        break
-
-    else:
-        print("I'm sorry, I didn't understand your request.")
-        
-        
-        
 import requests
 import json
 
 # API key for OpenWeatherMap
-API_KEY = "<YOUR_API_KEY_HERE>"
+API_KEY = "1fe6df620337f168a605f5c0ff3925f5"
 
 # Function to get the current weather and forecast for a location
 def get_weather(location):
